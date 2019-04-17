@@ -7,6 +7,17 @@ namespace Convey.CQRS.Commands
 {
     public static class Extensions
     {
+        public static IConveyBuilder AddCommandHandlers(this IConveyBuilder builder)
+        {
+            builder.Services.Scan(s =>
+                s.FromEntryAssembly()
+                    .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<>)))
+                    .AsImplementedInterfaces()
+                    .WithTransientLifetime());
+
+            return builder;
+        }
+        
         public static Task SendAsync<TCommand>(this IBusPublisher busPublisher, TCommand command, ICorrelationContext context) 
             where TCommand : ICommand
             => busPublisher.PublishAsync(command, context);
