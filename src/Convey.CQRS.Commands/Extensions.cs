@@ -1,3 +1,4 @@
+using Convey.CQRS.Commands.Dispatchers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Convey.CQRS.Commands
@@ -12,6 +13,7 @@ namespace Convey.CQRS.Commands
                     .AsImplementedInterfaces()
                     .WithTransientLifetime());
 
+            builder.Services.AddTransient<ICommandDispatcher, CommandDispatcher>();
             return builder;
         }
     }
