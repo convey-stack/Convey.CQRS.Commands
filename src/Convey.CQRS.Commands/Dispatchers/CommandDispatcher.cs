@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Convey.CQRS.Commands.Dispatchers
 {
-    public class CommandDispatcher : ICommandDispatcher
+    internal sealed class CommandDispatcher : ICommandDispatcher
     {
         private readonly IServiceProvider _serviceProvider;
 
