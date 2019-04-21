@@ -1,5 +1,3 @@
-using Convey.Types;
-
 namespace Convey.CQRS.Commands
 {
     //Marker
