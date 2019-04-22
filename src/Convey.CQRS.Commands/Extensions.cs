@@ -12,7 +12,12 @@ namespace Convey.CQRS.Commands
                     .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<>)))
                     .AsImplementedInterfaces()
                     .WithTransientLifetime());
+            
+            return builder;
+        }
 
+        public static IConveyBuilder AddInMemoryCommandDispatcher(this IConveyBuilder builder)
+        {
             builder.Services.AddTransient<ICommandDispatcher, CommandDispatcher>();
             return builder;
         }
