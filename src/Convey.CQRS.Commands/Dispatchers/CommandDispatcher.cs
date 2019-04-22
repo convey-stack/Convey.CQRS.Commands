@@ -13,7 +13,7 @@ namespace Convey.CQRS.Commands.Dispatchers
             _serviceProvider = serviceProvider;
         }
         
-        public Task DispatchAsync<T>(T command) where T : ICommand
+        public Task DispatchAsync<T>(T command) where T : class, ICommand
         {
             using (var scope = _serviceProvider.CreateScope())
             {
