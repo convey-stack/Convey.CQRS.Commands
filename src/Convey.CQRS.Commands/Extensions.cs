@@ -1,3 +1,4 @@
+using System;
 using Convey.CQRS.Commands.Dispatchers;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,11 +9,11 @@ namespace Convey.CQRS.Commands
         public static IConveyBuilder AddCommandHandlers(this IConveyBuilder builder)
         {
             builder.Services.Scan(s =>
-                s.FromEntryAssembly()
+                s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
                     .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<>)))
                     .AsImplementedInterfaces()
                     .WithTransientLifetime());
-            
+
             return builder;
         }
 
