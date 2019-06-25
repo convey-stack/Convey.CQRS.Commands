@@ -19,7 +19,7 @@ namespace Convey.CQRS.Commands
 
         public static IConveyBuilder AddInMemoryCommandDispatcher(this IConveyBuilder builder)
         {
-            builder.Services.AddTransient<ICommandDispatcher, CommandDispatcher>();
+            builder.Services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
             return builder;
         }
     }

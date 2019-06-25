@@ -9,22 +9,18 @@ namespace Convey.CQRS.Commands.Dispatchers
         private readonly IServiceProvider _serviceProvider;
 
         public CommandDispatcher(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
+            => _serviceProvider = serviceProvider;
         
         public Task SendAsync<T>(T command) where T : class, ICommand
         {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var handler = scope.ServiceProvider.GetService<ICommandHandler<T>>();
-                if (handler is null)
-                {
-                    throw new InvalidOperationException($"Command handler for: '{command}' was not found.");
-                }
+            var handler = _serviceProvider.GetService<ICommandHandler<T>>();
                 
-                return handler.HandleAsync(command);
+            if (handler is null)
+            {
+                throw new InvalidOperationException($"Command handler for: '{command}' was not found.");
             }
+                
+            return handler.HandleAsync(command);
         }
     }
 }
