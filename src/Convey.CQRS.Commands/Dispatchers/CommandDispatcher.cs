@@ -6,21 +6,25 @@ namespace Convey.CQRS.Commands.Dispatchers
 {
     internal sealed class CommandDispatcher : ICommandDispatcher
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceScopeFactory _serviceFactory;
 
-        public CommandDispatcher(IServiceProvider serviceProvider)
-            => _serviceProvider = serviceProvider;
+        public CommandDispatcher(IServiceScopeFactory serviceFactory)
+        {
+            _serviceFactory = serviceFactory;
+        }
         
         public Task SendAsync<T>(T command) where T : class, ICommand
         {
-            var handler = _serviceProvider.GetService<ICommandHandler<T>>();
-                
-            if (handler is null)
+            using (var scope = _serviceFactory.CreateScope())
             {
-                throw new InvalidOperationException($"Command handler for: '{command}' was not found.");
-            }
+                var handler = scope.ServiceProvider.GetService<ICommandHandler<T>>();
+                if (handler is null)
+                {
+                    throw new InvalidOperationException($"Command handler for: '{command}' was not found.");
+                }
                 
-            return handler.HandleAsync(command);
+                return handler.HandleAsync(command);
+            }
         }
     }
 }
