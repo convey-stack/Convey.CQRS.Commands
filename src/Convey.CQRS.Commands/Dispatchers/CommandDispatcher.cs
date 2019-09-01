@@ -6,16 +6,16 @@ namespace Convey.CQRS.Commands.Dispatchers
 {
     internal sealed class CommandDispatcher : ICommandDispatcher
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceScopeFactory _serviceFactory;
 
-        public CommandDispatcher(IServiceProvider serviceProvider)
+        public CommandDispatcher(IServiceScopeFactory serviceFactory)
         {
-            _serviceProvider = serviceProvider;
+            _serviceFactory = serviceFactory;
         }
         
         public Task SendAsync<T>(T command) where T : class, ICommand
         {
-            using (var scope = _serviceProvider.CreateScope())
+            using (var scope = _serviceFactory.CreateScope())
             {
                 var handler = scope.ServiceProvider.GetService<ICommandHandler<T>>();
                 if (handler is null)
